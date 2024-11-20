@@ -7,10 +7,8 @@ bot = telebot.TeleBot(Token)
 # Handle '/start' and '/help'
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
-    bot.reply_to(message, """\
-Hi there, I am EchoBot.
-I am here to echo your kind words back to you. Just say anything nice and I'll say the exact same thing to you!\
-""")
+    bot.reply_to(message, """\Привет! Я бот который генерирует изображение просто пиши что хочешь увидеть.\
+            """)
 
 
 # Handle all other messages with content_type 'text' (content_types defaults to ['text'])
@@ -18,10 +16,13 @@ I am here to echo your kind words back to you. Just say anything nice and I'll s
 def echo_message(message):
     user_id = message.chat.id
     prompt = message.text
-    bot.reply_to(message, "Wait 1 min")
+    bot.reply_to(message, "Генерирую картинку, подожди 3 минуты")
+    bot.send_chat_action(message.chat.id, 'generation')
     img = show(prompt)
     with open(img, 'rb') as photo:
+        
         bot.send_photo(user_id, photo, caption="Поздравляем! Ты получил картинку!")
+        
 
 
 bot.infinity_polling()
